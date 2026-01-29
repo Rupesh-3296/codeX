@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Replica – Learn Calmly</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body {
+      background: linear-gradient(180deg, #eef5f3, #f9fcfb);
+      color: #1f2933;
+    }
+
+    /* DARK MODE */
+    body.dark {
+      background: linear-gradient(180deg, #0f172a, #020617);
+      color: #e5e7eb;
+    }
+
+    body.dark .header,
+    body.dark .card,
+    body.dark .footer {
+      background: #020617;
+      border-color: #1e293b;
+    }
+
+    body.dark nav a,
+    body.dark .logo {
+      color: #a7f3d0;
+    }
+
+    body.dark .card p,
+    body.dark .footer {
+      color: #94a3b8;
+    }
+
+    body.dark .btn.github {
+      background: #020617;
+      border-color: #334155;
+      color: #a7f3d0;
+    }
+
+    body.dark .btn.github:hover {
+      background: #020617;
+    }
+
+    /* HEADER */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px 70px;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #e6ecea;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: #4a8f82;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    nav a {
+      color: #3a4f4b;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      color: #4a8f82;
+    }
+
+    .toggle {
+      cursor: pointer;
+      font-size: 18px;
+      color: #4a8f82;
+    }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 120px 20px 100px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .hero h1 {
+      font-size: 52px;
+      font-weight: 700;
+      color: #1f3d38;
+      margin-bottom: 20px;
+    }
+
+    body.dark .hero h1 {
+      color: #e5e7eb;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: #5f7f78;
+      margin-bottom: 45px;
+    }
+
+    body.dark .hero p {
+      color: #9ca3af;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 22px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 14px 36px;
+      border-radius: 999px;
+      border: none;
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn.primary {
+      background: #4a8f82;
+      color: #ffffff;
+      font-weight: 600;
+      box-shadow: 0 12px 30px rgba(74, 143, 130, 0.3);
+    }
+
+    .btn.primary:hover {
+      background: #3c7a6f;
+      transform: translateY(-2px);
+    }
+
+    .btn.github {
+      background: #ffffff;
+      color: #4a8f82;
+      border: 1.5px solid #cfe1dc;
+      text-decoration: none;
+    }
+
+    .btn.github:hover {
+      background: #f2f8f6;
+      transform: translateY(-2px);
+    }
+
+    /* FEATURES */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 35px;
+      padding: 80px 70px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 22px;
+      padding: 45px 35px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12), 0 8px 20px rgba(0, 0, 0, 0.08);
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 35px 80px rgba(0, 0, 0, 0.18), 0 12px 30px rgba(0, 0, 0, 0.12);
+      transform: translateY(-8px);
+    }
+
+    .icon {
+      font-size: 42px;
+      margin-bottom: 24px;
+    }
+
+    .bulb { color: #f2c94c; }
+    .computer { color: #56b6c2; }
+    .settings { color: #6fcf97; }
+
+    .card h3 {
+      font-size: 20px;
+      margin-bottom: 14px;
+      color: #1f3d38;
+    }
+
+    body.dark .card h3 {
+      color: #e5e7eb;
+    }
+
+    .card p {
+      font-size: 15px;
+      color: #6b8f87;
+    }
+
+    /* FOOTER */
+    .footer {
+      text-align: center;
+      padding: 28px;
+      background: #f1f7f5;
+      font-size: 14px;
+      color: #6b8f87;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 38px; }
+      .header { padding: 20px 30px; }
+      .features { padding: 60px 30px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo">Replica</div>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Feedback</a>
+      <a href="#">Contact</a>
+      <i class="fa-solid fa-moon toggle" id="themeToggle"></i>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Build. Learn. Replicate.</h1>
+    <p>Calm, focused learning experience where you build real projects step by step — without pressure.</p>
+
+    <div class="buttons">
+      <button class="btn primary">
+        <i class="fa-solid fa-leaf"></i> Start Learning
+      </button>
+      <a href="https://github.com" target="_blank" class="btn github">
+        <i class="fa-brands fa-github"></i> View on GitHub
+      </a>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features">
+    <div class="card">
+      <i class="fa-solid fa-lightbulb icon bulb"></i>
+      <h3>Clear Thinking</h3>
+      <p>Peaceful design that helps you focus on concepts without distraction.</p>
+    </div>
+
+    <div class="card">
+      <i class="fa-solid fa-laptop-code icon computer"></i>
+      <h3>Step by Step</h3>
+      <p>Learn slowly, clearly, and confidently with guided projects.</p>
+    </div>
+
+    <div class="card">
+      <i class="fa-solid fa-spa icon settings"></i>
+      <h3>Beginner Comfort</h3>
+      <p>Designed for beginners with soothing colors and simple structure.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    © 2026 Replica · Learn Calmly · Grow Confidently
+  </footer>
+
+  <script src="scripyt.js"></script>
+
+</body>
+</html>
