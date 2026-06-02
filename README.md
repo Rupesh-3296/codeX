@@ -1,4 +1,5 @@
 <img width="1920" height="557" alt="image" src="https://github.com/user-attachments/assets/e8afd660-ecde-4c83-afc3-825b721ae95e" />
+
 ## 🖥️ RepliCode — Frontend Website Replication & Improvement Hackathon
 
 > A frontend-focused hackathon designed to test and sharpen practical UI development skills through real-world replication challenges.
