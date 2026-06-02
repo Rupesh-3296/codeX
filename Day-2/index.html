@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ఆప్యాయ రైతు - Indian Agriculture Dashboard</title>
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet CSS for maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Animate.css for animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Noto+Sans+Telugu:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2e7d32;
+            --primary-light: #4caf50;
+            --primary-dark: #1b5e20;
+            --secondary-color: #ff9800;
+            --accent-color: #2196f3;
+            --light-bg: #f5f9f5;
+            --dark-text: #1a1a1a;
+            --light-text: #5a5a5a;
+            --card-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            --transition-speed: 0.3s;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', 'Noto Sans Telugu', sans-serif;
+            color: var(--dark-text);
+            background-color: #f9fdf9;
+            line-height: 1.6;
+        }
+        
+        .telugu-text {
+            font-family: 'Noto Sans Telugu', 'Poppins', sans-serif;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+            color: white;
+            padding: 1.2rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            font-size: 2.2rem;
+            animation: pulse 2s infinite;
+        }
+        
+        .logo-text h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+        
+        .logo-text p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 0;
+        }
+        
+        .language-switcher {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 500;
+            transition: all var(--transition-speed);
+            cursor: pointer;
+        }
+        
+        .lang-btn:hover, .lang-btn.active {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+        
+        .main-container {
+            padding: 2rem 0;
+            min-height: calc(100vh - 180px);
+        }
+        
+        .section-title {
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            position: relative;
+            padding-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--secondary-color);
+            border-radius: 2px;
+        }
+        
+        .location-selector {
+            background-color: white;
+            border-radius: 12px;
+            padding: 1.8rem;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 2rem;
+            border-top: 5px solid var(--primary-color);
+            transition: transform var(--transition-speed);
+        }
+        
+        .location-selector:hover {
+            transform: translateY(-5px);
+        }
+        
+        .btn-primary-custom {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            padding: 0.7rem 2rem;
+            font-weight: 600;
+            transition: all var(--transition-speed);
+            border-radius: 8px;
+        }
+        
+        .btn-primary-custom:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(46, 125, 50, 0.25);
+        }
+        
+        .btn-outline-custom {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            padding: 0.7rem 1.5rem;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all var(--transition-speed);
+        }
+        
+        .btn-outline-custom:hover {
+            background-color: var(--accent-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .data-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 1.8rem;
+            box-shadow: var(--card-shadow);
+            height: 100%;
+            transition: all var(--transition-speed);
+            border-top: 5px solid var(--secondary-color);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .data-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--secondary-color), var(--primary-light));
+        }
+        
+        .data-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+        
+        .data-card h4 {
+            color: var(--primary-dark);
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+        }
+        
+        .data-card h4 i {
+            color: var(--secondary-color);
+        }
+        
+        .data-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+        
+        .data-unit {
+            font-size: 1rem;
+            color: var(--light-text);
+            font-weight: 500;
+            margin-bottom: 1.2rem;
+        }
+        
+        .data-details {
+            margin-top: 1.2rem;
+            padding-top: 1.2rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .data-details p {
+            margin-bottom: 0.6rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .data-details span:first-child {
+            font-weight: 500;
+            color: var(--light-text);
+        }
+        
+        .data-details span:last-child {
+            font-weight: 700;
+            color: var(--dark-text);
+        }
+        
+        .map-container {
+            background-color: white;
+            border-radius: 12px;
+            padding: 1.8rem;
+            box-shadow: var(--card-shadow);
+            margin-top: 2rem;
+            border-top: 5px solid var(--accent-color);
+            transition: transform var(--transition-speed);
+        }
+        
+        .map-container:hover {
+            transform: translateY(-5px);
+        }
+        
+        #map {
+            height: 400px;
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .footer {
+            background-color: var(--primary-dark);
+            color: white;
+            padding: 1.5rem 0;
+            margin-top: 3rem;
+        }
+        
+        .footer p {
+            margin-bottom: 0;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+        
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .spinner-border {
+            width: 3.5rem;
+            height: 3.5rem;
+            color: var(--primary-color);
+        }
+        
+        .weather-icon {
+            font-size: 3rem;
+            margin-bottom: 0.8rem;
+            color: var(--primary-light);
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .soil-type-indicator {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .soil-clay {
+            background-color: #8d6e63;
+            color: white;
+        }
+        
+        .soil-loam {
+            background-color: #a1887f;
+            color: white;
+        }
+        
+        .soil-sandy {
+            background-color: #d7ccc8;
+            color: #5d4037;
+        }
+        
+        .soil-silt {
+            background-color: #bcaaa4;
+            color: white;
+        }
+        
+        .soil-red {
+            background-color: #c62828;
+            color: white;
+        }
+        
+        .soil-black {
+            background-color: #424242;
+            color: white;
+        }
+        
+        .crop-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            background-color: #e8f5e9;
+            color: var(--primary-dark);
+            border: 1px solid #c8e6c9;
+            transition: all var(--transition-speed);
+        }
+        
+        .crop-badge:hover {
+            background-color: var(--primary-light);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .location-badge {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 1rem;
+            animation: fadeIn 1s;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .animate-card {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        .animate-slide-left {
+            animation: slideInLeft 0.6s ease-out;
+        }
+        
+        @media (max-width: 768px) {
+            .logo-text h1 {
+                font-size: 1.5rem;
+            }
+            
+            .data-value {
+                font-size: 2rem;
+            }
+            
+            .main-container {
+                padding: 1.5rem 0;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .language-switcher {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        
+        .recommended-crops-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 1rem;
+        }
+        
+        .language-icon {
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-tractor"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1 class="telugu-text">ఆప్యాయ రైతు</h1>
+                        <p class="telugu-text">భారతీయ వ్యవసాయ డాష్బోర్డ్</p>
+                    </div>
+                </div>
+                
+                <div class="language-switcher">
+                    <button class="lang-btn active" id="langTelugu">
+                        <i class="fas fa-language language-icon"></i> తెలుగు
+                    </button>
+                    <button class="lang-btn" id="langEnglish">
+                        <i class="fas fa-globe language-icon"></i> English
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="container">
+            <!-- Location Selection -->
+            <div class="location-selector animate-slide-left">
+                <h3 class="section-title">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span id="locationTitle">స్థానం ఎంచుకోండి</span>
+                </h3>
+                <p id="locationDescription" class="telugu-text mb-4">మీ ప్రాంతం కోసం వర్షపాతం, నేల రకం, వాతావరణ పరిస్థితులను పొందడానికి ఒక స్థానాన్ని ఎంచుకోండి.</p>
+                
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="stateSelect" class="form-label fw-bold">
+                                    <i class="fas fa-state"></i> <span id="stateLabel">రాష్ట్రం</span>
+                                </label>
+                                <select class="form-select" id="stateSelect">
+                                    <option value="">రాష్ట్రం ఎంచుకోండి</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="districtSelect" class="form-label fw-bold">
+                                    <i class="fas fa-city"></i> <span id="districtLabel">జిల్లా</span>
+                                </label>
+                                <select class="form-select" id="districtSelect">
+                                    <option value="">జిల్లా ఎంచుకోండి</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex flex-wrap gap-3 mt-3">
+                            <button id="currentLocationBtn" class="btn btn-outline-custom">
+                                <i class="fas fa-location-arrow me-2"></i>
+                                <span id="currentLocationBtnText">ప్రస్తుత స్థానం</span>
+                            </button>
+                            <button id="getDataBtn" class="btn btn-primary-custom">
+                                <i class="fas fa-chart-bar me-2"></i>
+                                <span id="getDataBtnText">వ్యవసాయ డేటా పొందండి</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="location-badge animate-card" id="selectedLocationBadge" style="display: none;">
+                            <i class="fas fa-check-circle"></i>
+                            <span id="selectedLocationText">స్థానం ఎంచుకోబడింది</span>
+                        </div>
+                        <div class="text-center mt-4">
+                            <i class="fas fa-map-marked-alt fa-3x text-primary" style="opacity: 0.8;"></i>
+                            <p class="telugu-text mt-2" id="mapInstructions">జిల్లా ఎంచుకున్న తర్వాత మ్యాప్ లో చూపబడుతుంది</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Loading Spinner -->
+            <div class="loading-spinner" id="loadingSpinner">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-3 fw-bold" id="loadingText">వ్యవసాయ డేటా లోడ్ అవుతోంది...</p>
+            </div>
+            
+            <!-- Data Display Cards -->
+            <div class="row" id="dataCards" style="display: none;">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="data-card animate-card">
+                        <h4><i class="fas fa-cloud-rain"></i> <span id="rainfallTitle">వర్షపాతం</span></h4>
+                        <div class="weather-icon">
+                            <i class="fas fa-cloud-rain"></i>
+                        </div>
+                        <div class="data-value" id="rainfallValue">0</div>
+                        <div class="data-unit" id="rainfallUnit">మిమీ ప్రతి నెల</div>
+                        <div class="data-details">
+                            <p><span id="annualRainfallLabel">వార్షిక మొత్తం:</span> <span id="annualRainfall">0 మిమీ</span></p>
+                            <p><span id="rainySeasonLabel">వర్షాకాలం:</span> <span id="rainySeason">మాన్సూన్</span></p>
+                            <p><span id="lastRainLabel">చివరి కొలత:</span> <span id="lastRain">ఈ నెల</span></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="data-card animate-card" style="animation-delay: 0.1s;">
+                        <h4><i class="fas fa-mountain"></i> <span id="soilTitle">నేల రకం</span></h4>
+                        <div class="weather-icon">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <div class="mb-3">
+                            <span id="primarySoil" class="soil-type-indicator soil-red">ఎరుపు నేల</span>
+                        </div>
+                        <div class="data-details">
+                            <p><span id="phLevelLabel">పీహెచ్ స్థాయి:</span> <span id="phLevel">6.5</span></p>
+                            <p><span id="nutrientLabel">పోషక స్థాయి:</span> <span id="nutrientLevel">మధ్యస్థం</span></p>
+                            <p><span id="drainageLabel">నీటిపారుదల:</span> <span id="drainage">మంచిది</span></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="data-card animate-card" style="animation-delay: 0.2s;">
+                        <h4><i class="fas fa-sun"></i> <span id="climateTitle">వాతావరణ పరిస్థితులు</span></h4>
+                        <div class="weather-icon">
+                            <i class="fas fa-thermometer-half" id="climateIcon"></i>
+                        </div>
+                        <div class="data-details">
+                            <p><span id="temperatureLabel">ఉష్ణోగ్రత:</span> <span id="temperature">24°C</span></p>
+                            <p><span id="humidityLabel">తేమ:</span> <span id="humidity">65%</span></p>
+                            <p><span id="climateZoneLabel">వాతావరణ మండలం:</span> <span id="climateZone">సమశీతోష్ణ</span></p>
+                            <p><span id="growingSeasonLabel">పంట కాలం:</span> <span id="growingSeason">8 నెలలు</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Map and Additional Info -->
+            <div class="row" id="additionalInfo" style="display: none;">
+                <div class="col-lg-8 mb-4">
+                    <div class="map-container">
+                        <h3 class="section-title">
+                            <i class="fas fa-map me-2"></i>
+                            <span id="mapTitle">స్థానం మ్యాప్</span>
+                        </h3>
+                        <div id="map">
+                            <!-- Map will be rendered here -->
+                        </div>
+                        <div class="mt-4">
+                            <h5 class="fw-bold mb-3">
+                                <i class="fas fa-seedling me-2 text-success"></i>
+                                <span id="recommendedCropsTitle">సిఫారసు చేసిన పంటలు</span>
+                            </h5>
+                            <div id="recommendedCrops" class="recommended-crops-container">
+                                <!-- Crops will be inserted here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 mb-4">
+                    <div class="data-card">
+                        <h4><i class="fas fa-calendar-alt"></i> <span id="seasonalTitle">సీజన్ క్యాలెండర్</span></h4>
+                        <div class="data-details">
+                            <p><span id="plantingSeasonLabel">నాటే సీజన్:</span> <span id="plantingSeason">మార్చి - మే</span></p>
+                            <p><span id="harvestSeasonLabel">కోత సీజన్:</span> <span id="harvestSeason">ఆగస్టు - అక్టోబర్</span></p>
+                            <p><span id="dryPeriodLabel">పొడి కాలం:</span> <span id="dryPeriod">డిసెంబర్ - ఫిబ్రవరి</span></p>
+                            <p><span id="frostRiskLabel">చలి ప్రమాదం:</span> <span id="frostRisk">తక్కువ</span></p>
+                        </div>
+                        
+                        <h5 class="mt-4 mb-3">
+                            <i class="fas fa-tint me-2 text-primary"></i>
+                            <span id="irrigationTitle">నీటిపారుదల అవసరాలు</span>
+                        </h5>
+                        <div class="data-details">
+                            <p><span id="waterReqLabel">నీటి అవసరం:</span> <span id="waterRequirement">మధ్యస్థం</span></p>
+                            <p><span id="irrigationTypeLabel">నీటిపారుదల రకం:</span> <span id="irrigationType">డ్రిప్/స్ప్రింక్లర్</span></p>
+                            <p><span id="irrigationFreqLabel">ప్రతి వారం:</span> <span id="irrigationFrequency">2-3 సార్లు</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="telugu-text">
+                        <i class="fas fa-copyright me-1"></i> 2023 ఆప్యాయ రైతు. హక్కులు ప్రత్యేకించబడినవి.
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p id="lastUpdated" class="telugu-text">
+                        డేటా రోజూ నవీకరించబడుతుంది | చివరి నవీకరణ: <span id="currentDate"></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Leaflet JS for maps -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        // Language data
+        const languageData = {
+            te: {
+                // Header
+                appName: "ఆప్యాయ రైతు",
+                appSubtitle: "భారతీయ వ్యవసాయ డాష్బోర్డ్",
+                
+                // Location Selector
+                locationTitle: "స్థానం ఎంచుకోండి",
+                locationDescription: "మీ ప్రాంతం కోసం వర్షపాతం, నేల రకం, వాతావరణ పరిస్థితులను పొందడానికి ఒక స్థానాన్ని ఎంచుకోండి.",
+                stateLabel: "రాష్ట్రం",
+                districtLabel: "జిల్లా",
+                selectState: "రాష్ట్రం ఎంచుకోండి",
+                selectDistrict: "జిల్లా ఎంచుకోండి",
+                currentLocationBtnText: "ప్రస్తుత స్థానం",
+                getDataBtnText: "వ్యవసాయ డేటా పొందండి",
+                selectedLocationText: "స్థానం ఎంచుకోబడింది",
+                mapInstructions: "జిల్లా ఎంచుకున్న తర్వాత మ్యాప్ లో చూపబడుతుంది",
+                
+                // Loading
+                loadingText: "వ్యవసాయ డేటా లోడ్ అవుతోంది...",
+                
+                // Rainfall Card
+                rainfallTitle: "వర్షపాతం",
+                rainfallUnit: "మిమీ ప్రతి నెల",
+                annualRainfallLabel: "వార్షిక మొత్తం:",
+                rainySeasonLabel: "వర్షాకాలం:",
+                lastRainLabel: "చివరి కొలత:",
+                
+                // Soil Card
+                soilTitle: "నేల రకం",
+                phLevelLabel: "పీహెచ్ స్థాయి:",
+                nutrientLabel: "పోషక స్థాయి:",
+                drainageLabel: "నీటిపారుదల:",
+                
+                // Climate Card
+                climateTitle: "వాతావరణ పరిస్థితులు",
+                temperatureLabel: "ఉష్ణోగ్రత:",
+                humidityLabel: "తేమ:",
+                climateZoneLabel: "వాతావరణ మండలం:",
+                growingSeasonLabel: "పంట కాలం:",
+                
+                // Map
+                mapTitle: "స్థానం మ్యాప్",
+                recommendedCropsTitle: "సిఫారసు చేసిన పంటలు",
+                
+                // Seasonal Calendar
+                seasonalTitle: "సీజన్ క్యాలెండర్",
+                plantingSeasonLabel: "నాటే సీజన్:",
+                harvestSeasonLabel: "కోత సీజన్:",
+                dryPeriodLabel: "పొడి కాలం:",
+                frostRiskLabel: "చలి ప్రమాదం:",
+                
+                // Irrigation
+                irrigationTitle: "నీటిపారుదల అవసరాలు",
+                waterReqLabel: "నీటి అవసరం:",
+                irrigationTypeLabel: "నీటిపారుదల రకం:",
+                irrigationFreqLabel: "ప్రతి వారం:",
+                
+                // Footer
+                footerText: "హక్కులు ప్రత్యేకించబడినవి.",
+                lastUpdated: "డేటా రోజూ నవీకరించబడుతుంది | చివరి నవీకరణ:",
+                
+                // Soil Types
+                soilRed: "ఎరుపు నేల",
+                soilBlack: "నల్ల నేల",
+                soilAlluvial: "పలుచని నేల",
+                soilClay: "క్లే నేల",
+                soilSandy: "ఇసుక నేల",
+                
+                // Climate Zones
+                zoneTropical: "ఉష్ణమండల",
+                zoneSubtropical: "ఉపఉష్ణమండల",
+                zoneTemperate: "సమశీతోష్ణ",
+                zoneArid: "శుష్క",
+                
+                // Nutrient Levels
+                nutrientHigh: "ఎక్కువ",
+                nutrientMedium: "మధ్యస్థం",
+                nutrientLow: "తక్కువ",
+                
+                // Drainage
+                drainageGood: "మంచిది",
+                drainageModerate: "మధ్యస్థం",
+                drainagePoor: "చెడు",
+                
+                // Water Requirements
+                waterHigh: "ఎక్కువ",
+                waterMedium: "మధ్యస్థం",
+                waterLow: "తక్కువ"
+            },
+            en: {
+                // Header
+                appName: "Aapya Raithu",
+                appSubtitle: "Indian Agriculture Dashboard",
+                
+                // Location Selector
+                locationTitle: "Select Location",
+                locationDescription: "Select a location to get rainfall, soil type, and climate conditions for your region.",
+                stateLabel: "State",
+                districtLabel: "District",
+                selectState: "Select State",
+                selectDistrict: "Select District",
+                currentLocationBtnText: "Current Location",
+                getDataBtnText: "Get Agriculture Data",
+                selectedLocationText: "Location Selected",
+                mapInstructions: "District will be shown on map after selection",
+                
+                // Loading
+                loadingText: "Loading agriculture data...",
+                
+                // Rainfall Card
+                rainfallTitle: "Rainfall",
+                rainfallUnit: "mm per month",
+                annualRainfallLabel: "Annual Total:",
+                rainySeasonLabel: "Rainy Season:",
+                lastRainLabel: "Last Measurement:",
+                
+                // Soil Card
+                soilTitle: "Soil Type",
+                phLevelLabel: "pH Level:",
+                nutrientLabel: "Nutrient Level:",
+                drainageLabel: "Drainage:",
+                
+                // Climate Card
+                climateTitle: "Climate Conditions",
+                temperatureLabel: "Temperature:",
+                humidityLabel: "Humidity:",
+                climateZoneLabel: "Climate Zone:",
+                growingSeasonLabel: "Growing Season:",
+                
+                // Map
+                mapTitle: "Location Map",
+                recommendedCropsTitle: "Recommended Crops",
+                
+                // Seasonal Calendar
+                seasonalTitle: "Seasonal Calendar",
+                plantingSeasonLabel: "Planting Season:",
+                harvestSeasonLabel: "Harvest Season:",
+                dryPeriodLabel: "Dry Period:",
+                frostRiskLabel: "Frost Risk:",
+                
+                // Irrigation
+                irrigationTitle: "Irrigation Needs",
+                waterReqLabel: "Water Requirement:",
+                irrigationTypeLabel: "Irrigation Type:",
+                irrigationFreqLabel: "Per Week:",
+                
+                // Footer
+                footerText: "All rights reserved.",
+                lastUpdated: "Data updates daily | Last refreshed:",
+                
+                // Soil Types
+                soilRed: "Red Soil",
+                soilBlack: "Black Soil",
+                soilAlluvial: "Alluvial Soil",
+                soilClay: "Clay Soil",
+                soilSandy: "Sandy Soil",
+                
+                // Climate Zones
+                zoneTropical: "Tropical",
+                zoneSubtropical: "Subtropical",
+                zoneTemperate: "Temperate",
+                zoneArid: "Arid",
+                
+                // Nutrient Levels
+                nutrientHigh: "High",
+                nutrientMedium: "Medium",
+                nutrientLow: "Low",
+                
+                // Drainage
+                drainageGood: "Good",
+                drainageModerate: "Moderate",
+                drainagePoor: "Poor",
+                
+                // Water Requirements
+                waterHigh: "High",
+                waterMedium: "Medium",
+                waterLow: "Low"
+            }
+        };
+
+        // Sample agricultural data for Indian states and districts
+        const agriculturalData = {
+            "తెలంగాణ": {
+                "రంగారెడ్డి": {
+                    coordinates: [17.3850, 78.4867],
+                    rainfall: 75,
+                    annualRainfall: 800,
+                    rainySeason: "జూన్ - సెప్టెంబర్",
+                    primarySoil: "ఎరుపు నేల",
+                    soilClass: "soil-red",
+                    phLevel: 7.2,
+                    nutrientLevel: "మధ్యస్థం",
+                    drainage: "మంచిది",
+                    temperature: 28,
+                    humidity: 58,
+                    climateZone: "ఉపఉష్ణమండల",
+                    growingSeason: "8 నెలలు",
+                    plantingSeason: "జూన్ - జూలై",
+                    harvestSeason: "సెప్టెంబర్ - నవంబర్",
+                    dryPeriod: "ఫిబ్రవరి - మే",
+                    frostRisk: "తక్కువ",
+                    waterRequirement: "మధ్యస్థం",
+                    irrigationType: "డ్రిప్",
+                    irrigationFrequency: "3-4 సార్లు",
+                    recommendedCrops: ["చెరకు", "వరి", "మిరప", "పత్తి", "మిలెట్స్"]
+                },
+                "మెదక్": {
+                    coordinates: [18.0000, 78.5000],
+                    rainfall: 95,
+                    annualRainfall: 950,
+                    rainySeason: "జూన్ - అక్టోబర్",
+                    primarySoil: "నల్ల నేల",
+                    soilClass: "soil-black",
+                    phLevel: 7.5,
+                    nutrientLevel: "ఎక్కువ",
+                    drainage: "మంచిది",
+                    temperature: 26,
+                    humidity: 65,
+                    climateZone: "ఉపఉష్ణమండల",
+                    growingSeason: "9 నెలలు",
+                    plantingSeason: "జూన్ - జూలై",
+                    harvestSeason: "సెప్టెంబర్ - నవంబర్",
+                    dryPeriod: "మార్చి - మే",
+                    frostRisk: "తక్కువ",
+                    waterRequirement: "మధ్యస్థం",
+                    irrigationType: "కాలువ",
+                    irrigationFrequency: "2-3 సార్లు",
+                    recommendedCrops: ["వరి", "పత్తి", "చెరకు", "మిరప", "మొక్కజొన్న"]
+                }
+            },
+            "ఆంధ్రప్రదేశ్": {
+                "కృష్ణా": {
+                    coordinates: [16.5000, 80.6500],
+                    rainfall: 110,
+                    annualRainfall: 1100,
+                    rainySeason: "జూన్ - నవంబర్",
+                    primarySoil: "పలుచని నేల",
+                    soilClass: "soil-silt",
+                    phLevel: 7.0,
+                    nutrientLevel: "ఎక్కువ",
+                    drainage: "మంచిది",
+                    temperature: 27,
+                    humidity: 70,
+                    climateZone: "ఉపఉష్ణమండల",
+                    growingSeason: "10 నెలలు",
+                    plantingSeason: "జూన్ - జూలై",
+                    harvestSeason: "అక్టోబర్ - డిసెంబర్",
+                    dryPeriod: "ఫిబ్రవరి - మే",
+                    frostRisk: "తక్కువ",
+                    waterRequirement: "ఎక్కువ",
+                    irrigationType: "కాలువ/ఫ్లడ్",
+                    irrigationFrequency: "2-3 సార్లు",
+                    recommendedCrops: ["వరి", "మిరప", "పత్తి", "చెరకు", "అరటి"]
+                },
+                "గుంటూరు": {
+                    coordinates: [16.3000, 80.4500],
+                    rainfall: 90,
+                    annualRainfall: 950,
+                    rainySeason: "జూన్ - నవంబర్",
+                    primarySoil: "క్లే నేల",
+                    soilClass: "soil-clay",
+                    phLevel: 7.8,
+                    nutrientLevel: "మధ్యస్థం",
+                    drainage: "మధ్యస్థం",
+                    temperature: 28,
+                    humidity: 65,
+                    climateZone: "ఉపఉష్ణమండల",
+                    growingSeason: "9 నెలలు",
+                    plantingSeason: "జూన్ - ఆగస్ట్",
+                    harvestSeason: "నవంబర్ - జనవరి",
+                    dryPeriod: "మార్చి - మే",
+                    frostRisk: "తక్కువ",
+                    waterRequirement: "మధ్యస్థం",
+                    irrigationType: "డ్రిప్/స్ప్రింక్లర్",
+                    irrigationFrequency: "3-4 సార్లు",
+                    recommendedCrops: ["పత్తి", "చెరకు", "మిరప", "వరి", "కాయధన్యాలు"]
+                }
+            },
+            "మహారాష్ట్ర": {
+                "నాసిక్": {
+                    coordinates: [19.9975, 73.7898],
+                    rainfall: 65,
+                    annualRainfall: 700,
+                    rainySeason: "జూన్ - సెప్టెంబర్",
+                    primarySoil: "బ్లాక్ కాటన్ సాయిల్",
+                    soilClass: "soil-black",
+                    phLevel: 7.4,
+                    nutrientLevel: "మధ్యస్థం",
+                    drainage: "మంచిది",
+                    temperature: 25,
+                    humidity: 60,
+                    climateZone: "సమశీతోష్ణ",
+                    growingSeason: "8 నెలలు",
+                    plantingSeason: "జూన్ - జూలై",
+                    harvestSeason: "సెప్టెంబర్ - నవంబర్",
+                    dryPeriod: "అక్టోబర్ - మే",
+                    frostRisk: "మధ్యస్థం",
+                    waterRequirement: "మధ్యస్థం",
+                    irrigationType: "డ్రిప్",
+                    irrigationFrequency: "2-3 సార్లు",
+                    recommendedCrops: ["ద్రాక్ష", "ఉల్లిపాయ", "చెరకు", "గోధుమ", "బజ్రా"]
+                }
+            },
+            "పంజాబ్": {
+                "లుధియానా": {
+                    coordinates: [30.9010, 75.8573],
+                    rainfall: 45,
+                    annualRainfall: 750,
+                    rainySeason: "జూలై - సెప్టెంబర్",
+                    primarySoil: "పలుచని నేల",
+                    soilClass: "soil-silt",
+                    phLevel: 7.8,
+                    nutrientLevel: "ఎక్కువ",
+                    drainage: "మంచిది",
+                    temperature: 25,
+                    humidity: 68,
+                    climateZone: "సమశీతోష్ణ",
+                    growingSeason: "8 నెలలు",
+                    plantingSeason: "అక్టోబర్ - నవంబర్",
+                    harvestSeason: "ఏప్రిల్ - మే",
+                    dryPeriod: "అక్టోబర్ - మే",
+                    frostRisk: "మధ్యస్థం",
+                    waterRequirement: "ఎక్కువ",
+                    irrigationType: "ట్యూబ్వెల్/కాలువ",
+                    irrigationFrequency: "1-2 సార్లు",
+                    recommendedCrops: ["గోధుమ", "వరి", "పండు", "కూరగాయలు", "కాలీఫ్లవర్"]
+                }
+            }
+        };
+
+        // Indian states and districts data
+        const indianStates = {
+            "తెలంగాణ": ["రంగారెడ్డి", "మెదక్", "హైదరాబాద్", "కరీంనగర్", "నిజామాబాద్", "వరంగల్"],
+            "ఆంధ్రప్రదేశ్": ["కృష్ణా", "గుంటూరు", "ప్రకాశం", "చిత్తూరు", "కడప", "అనంతపురం"],
+            "మహారాష్ట్ర": ["నాసిక్", "పూణే", "ముంబై", "నాగ్పూర్", "ఔరంగాబాద్", "కోల్హాపూర్"],
+            "పంజాబ్": ["లుధియానా", "అమృత్సర్", "జలంధర్", "పటియాల", "ఫిరోజ్పూర్", "ఫరీద్కోట్"],
+            "గుజరాత్": ["అహ్మదాబాద్", "సూరత్", "వడోదరా", "రాజ్కోట్", "భావ్నగర్", "జామ్నగర్"],
+            "తమిళనాడు": ["చెన్నై", "కోయంబత్తూరు", "మదురై", "తిరుచిరాపల్లి", "సేలం", "తిరునెల్వేలి"],
+            "కర్ణాటక": ["బెంగళూరు", "మైసూరు", "హుబ్లీ", "బెల్గాం", "మంగళూరు", "గుల్బర్గా"],
+            "రాజస్థాన్": ["జైపూర్", "జోధ్పూర్", "ఉదయ్పూర్", "కోటా", "బికనేర్", "అజ్మేర్"]
+        };
+
+        // DOM elements
+        const stateSelect = document.getElementById('stateSelect');
+        const districtSelect = document.getElementById('districtSelect');
+        const getDataBtn = document.getElementById('getDataBtn');
+        const currentLocationBtn = document.getElementById('currentLocationBtn');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const dataCards = document.getElementById('dataCards');
+        const additionalInfo = document.getElementById('additionalInfo');
+        const currentDate = document.getElementById('currentDate');
+        const langTeluguBtn = document.getElementById('langTelugu');
+        const langEnglishBtn = document.getElementById('langEnglish');
+        const selectedLocationBadge = document.getElementById('selectedLocationBadge');
+        let map;
+        let currentLanguage = 'te';
+        let markers = [];
+
+        // Initialize current date
+        const now = new Date();
+        currentDate.textContent = now.toLocaleDateString('te-IN', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        });
+
+        // Initialize map
+        function initMap() {
+            // Default to India view
+            map = L.map('map').setView([20.5937, 78.9629], 5);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 18
+            }).addTo(map);
+        }
+
+        // Populate state dropdown
+        function populateStates() {
+            stateSelect.innerHTML = `<option value="">${getTranslation('selectState')}</option>`;
+            
+            Object.keys(indianStates).forEach(state => {
+                const option = document.createElement('option');
+                option.value = state;
+                option.textContent = state;
+                stateSelect.appendChild(option);
+            });
+        }
+
+        // Populate district dropdown based on state selection
+        stateSelect.addEventListener('change', function() {
+            const state = this.value;
+            districtSelect.innerHTML = `<option value="">${getTranslation('selectDistrict')}</option>`;
+            
+            if (state && indianStates[state]) {
+                indianStates[state].forEach(district => {
+                    const option = document.createElement('option');
+                    option.value = district;
+                    option.textContent = district;
+                    districtSelect.appendChild(option);
+                });
+            }
+            
+            // Reset data display
+            dataCards.style.display = 'none';
+            additionalInfo.style.display = 'none';
+            selectedLocationBadge.style.display = 'none';
+        });
+
+        // Get agricultural data when button is clicked
+        getDataBtn.addEventListener('click', function() {
+            const state = stateSelect.value;
+            const district = districtSelect.value;
+            
+            if (!state || !district) {
+                alert(currentLanguage === 'te' ? 
+                    'దయచేసి రాష్ట్రం మరియు జిల్లాను ఎంచుకోండి.' : 
+                    'Please select a state and district.');
+                return;
+            }
+            
+            // Show loading spinner
+            loadingSpinner.style.display = 'block';
+            dataCards.style.display = 'none';
+            additionalInfo.style.display = 'none';
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                displayAgriculturalData(state, district);
+                loadingSpinner.style.display = 'none';
+                dataCards.style.display = 'flex';
+                additionalInfo.style.display = 'flex';
+                selectedLocationBadge.style.display = 'inline-flex';
+            }, 1200);
+        });
+
+        // Current location button
+        currentLocationBtn.addEventListener('click', function() {
+            // Simulate getting current location
+            loadingSpinner.style.display = 'block';
+            selectedLocationBadge.style.display = 'none';
+            
+            setTimeout(() => {
+                // Simulate detecting Telangana location
+                stateSelect.value = 'తెలంగాణ';
+                
+                // Trigger change event to populate districts
+                const event = new Event('change');
+                stateSelect.dispatchEvent(event);
+                
+                // Set district
+                setTimeout(() => {
+                    districtSelect.value = 'రంగారెడ్డి';
+                    loadingSpinner.style.display = 'none';
+                    
+                    // Get data for this location
+                    displayAgriculturalData('తెలంగాణ', 'రంగారెడ్డి');
+                    dataCards.style.display = 'flex';
+                    additionalInfo.style.display = 'flex';
+                    selectedLocationBadge.style.display = 'inline-flex';
+                }, 500);
+            }, 1000);
+        });
+
+        // Display agricultural data function
+        function displayAgriculturalData(state, district) {
+            // Get data from our sample dataset
+            let data;
+            
+            if (agriculturalData[state] && agriculturalData[state][district]) {
+                data = agriculturalData[state][district];
+            } else {
+                // Default data if location not found
+                data = {
+                    coordinates: [20.5937, 78.9629],
+                    rainfall: 50,
+                    annualRainfall: 600,
+                    rainySeason: currentLanguage === 'te' ? "మాన్సూన్" : "Monsoon",
+                    primarySoil: currentLanguage === 'te' ? "నేల" : "Soil",
+                    soilClass: "soil-loam",
+                    phLevel: 6.5,
+                    nutrientLevel: currentLanguage === 'te' ? "మధ్యస్థం" : "Medium",
+                    drainage: currentLanguage === 'te' ? "మంచిది" : "Good",
+                    temperature: 20,
+                    humidity: 65,
+                    climateZone: currentLanguage === 'te' ? "సమశీతోష్ణ" : "Temperate",
+                    growingSeason: currentLanguage === 'te' ? "7 నెలలు" : "7 months",
+                    plantingSeason: currentLanguage === 'te' ? "మార్చి - మే" : "Mar - May",
+                    harvestSeason: currentLanguage === 'te' ? "ఆగస్టు - అక్టోబర్" : "Aug - Oct",
+                    dryPeriod: currentLanguage === 'te' ? "డిసెంబర్ - ఫిబ్రవరి" : "Dec - Feb",
+                    frostRisk: currentLanguage === 'te' ? "మధ్యస్థం" : "Medium",
+                    waterRequirement: currentLanguage === 'te' ? "మధ్యస్థం" : "Medium",
+                    irrigationType: currentLanguage === 'te' ? "డ్రిప్/స్ప్రింక్లర్" : "Drip/Sprinkler",
+                    irrigationFrequency: currentLanguage === 'te' ? "2-3 సార్లు" : "2-3 times",
+                    recommendedCrops: currentLanguage === 'te' ? 
+                        ["వరి", "గోధుమ", "చెరకు", "పత్తి"] : 
+                        ["Rice", "Wheat", "Sugarcane", "Cotton"]
+                };
+            }
+            
+            // Update location badge
+            document.getElementById('selectedLocationText').textContent = 
+                currentLanguage === 'te' ? 
+                `${district}, ${state} ఎంచుకోబడింది` :
+                `${district}, ${state} Selected`;
+            
+            // Update rainfall data
+            document.getElementById('rainfallValue').textContent = data.rainfall;
+            document.getElementById('annualRainfall').textContent = `${data.annualRainfall} ${currentLanguage === 'te' ? 'మిమీ' : 'mm'}`;
+            document.getElementById('rainySeason').textContent = data.rainySeason;
+            document.getElementById('lastRain').textContent = currentLanguage === 'te' ? 'ఈ నెల' : 'This Month';
+            
+            // Update soil data
+            document.getElementById('primarySoil').textContent = data.primarySoil;
+            document.getElementById('primarySoil').className = `soil-type-indicator ${data.soilClass}`;
+            document.getElementById('phLevel').textContent = data.phLevel;
+            document.getElementById('nutrientLevel').textContent = data.nutrientLevel;
+            document.getElementById('drainage').textContent = data.drainage;
+            
+            // Update climate data
+            document.getElementById('temperature').textContent = `${data.temperature}°C`;
+            document.getElementById('humidity').textContent = `${data.humidity}%`;
+            document.getElementById('climateZone').textContent = data.climateZone;
+            document.getElementById('growingSeason').textContent = data.growingSeason;
+            
+            // Update climate icon based on temperature
+            const climateIcon = document.getElementById('climateIcon');
+            if (data.temperature > 30) {
+                climateIcon.className = 'fas fa-thermometer-full';
+            } else if (data.temperature > 20) {
+                climateIcon.className = 'fas fa-thermometer-half';
+            } else {
+                climateIcon.className = 'fas fa-thermometer-quarter';
+            }
+            
+            // Update seasonal calendar
+            document.getElementById('plantingSeason').textContent = data.plantingSeason;
+            document.getElementById('harvestSeason').textContent = data.harvestSeason;
+            document.getElementById('dryPeriod').textContent = data.dryPeriod;
+            document.getElementById('frostRisk').textContent = data.frostRisk;
+            
+            // Update irrigation needs
+            document.getElementById('waterRequirement').textContent = data.waterRequirement;
+            document.getElementById('irrigationType').textContent = data.irrigationType;
+            document.getElementById('irrigationFrequency').textContent = data.irrigationFrequency;
+            
+            // Update recommended crops
+            const cropsContainer = document.getElementById('recommendedCrops');
+            cropsContainer.innerHTML = '';
+            
+            data.recommendedCrops.forEach(crop => {
+                const cropBadge = document.createElement('div');
+                cropBadge.className = 'crop-badge';
+                cropBadge.textContent = crop;
+                cropsContainer.appendChild(cropBadge);
+            });
+            
+            // Update map with location
+            updateMap(data.coordinates, district, state);
+        }
+
+        // Update map with location marker
+        function updateMap(coordinates, district, state) {
+            // Clear previous markers
+            markers.forEach(marker => map.removeLayer(marker));
+            markers = [];
+            
+            // Set view to coordinates
+            map.setView(coordinates, 10);
+            
+            // Add marker
+            const marker = L.marker(coordinates).addTo(map);
+            marker.bindPopup(`<b>${district}</b><br>${state}`).openPopup();
+            markers.push(marker);
+            
+            // Add circle for area
+            const circle = L.circle(coordinates, {
+                color: 'var(--primary-color)',
+                fillColor: 'var(--primary-light)',
+                fillOpacity: 0.2,
+                radius: 10000
+            }).addTo(map);
+            markers.push(circle);
+        }
+
+        // Language switching
+        function switchLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update language buttons
+            langTeluguBtn.classList.toggle('active', lang === 'te');
+            langEnglishBtn.classList.toggle('active', lang === 'en');
+            
+            // Update all translatable elements
+            document.querySelectorAll('[id]').forEach(element => {
+                const key = element.id;
+                if (languageData[lang][key]) {
+                    element.textContent = languageData[lang][key];
+                }
+            });
+            
+            // Update form placeholders
+            document.getElementById('stateSelect').querySelector('option[value=""]').textContent = languageData[lang].selectState;
+            document.getElementById('districtSelect').querySelector('option[value=""]').textContent = languageData[lang].selectDistrict;
+            
+            // Update date format based on language
+            const now = new Date();
+            const dateOptions = lang === 'te' ? 
+                { year: 'numeric', month: 'long', day: 'numeric' } :
+                { year: 'numeric', month: 'long', day: 'numeric' };
+            
+            currentDate.textContent = now.toLocaleDateString(lang === 'te' ? 'te-IN' : 'en-IN', dateOptions);
+            
+            // Update body class for font
+            if (lang === 'te') {
+                document.body.classList.add('telugu-text');
+            } else {
+                document.body.classList.remove('telugu-text');
+            }
+            
+            // If data is already displayed, update it with new language
+            if (dataCards.style.display !== 'none') {
+                const state = stateSelect.value;
+                const district = districtSelect.value;
+                if (state && district) {
+                    displayAgriculturalData(state, district);
+                }
+            }
+        }
+
+        // Helper function to get translation
+        function getTranslation(key) {
+            return languageData[currentLanguage][key] || key;
+        }
+
+        // Event listeners for language buttons
+        langTeluguBtn.addEventListener('click', () => switchLanguage('te'));
+        langEnglishBtn.addEventListener('click', () => switchLanguage('en'));
+
+        // Initialize the application
+        window.addEventListener('DOMContentLoaded', () => {
+            initMap();
+            populateStates();
+            switchLanguage('te'); // Default to Telugu
+            
+            // Set default values for demo
+            setTimeout(() => {
+                stateSelect.value = 'తెలంగాణ';
+                const event = new Event('change');
+                stateSelect.dispatchEvent(event);
+                
+                setTimeout(() => {
+                    districtSelect.value = 'రంగారెడ్డి';
+                    // Display initial data
+                    displayAgriculturalData('తెలంగాణ', 'రంగారెడ్డి');
+                    dataCards.style.display = 'flex';
+                    additionalInfo.style.display = 'flex';
+                    selectedLocationBadge.style.display = 'inline-flex';
+                }, 300);
+            }, 500);
+        });
+    </script>
+</body>
+</html>
