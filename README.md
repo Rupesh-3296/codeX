@@ -1,82 +1,82 @@
 <img width="1920" height="557" alt="image" src="https://github.com/user-attachments/assets/e8afd660-ecde-4c83-afc3-825b721ae95e" />
-All that you need to know about RepliCode – Frontend Website Replication & Improvement Hackathon
-RepliCode is a frontend-focused hackathon designed to test and improve participants’ practical UI development skills. Participants will be given a real-world website UI to observe, replicate, and enhance using core frontend technologies.
+# 🖥️ RepliCode — Frontend Website Replication & Improvement Hackathon
 
-The challenge emphasizes layout accuracy, code understanding, and thoughtful UI improvements, rather than frameworks or heavy tooling.
+> A frontend-focused hackathon designed to test and sharpen practical UI development skills through real-world replication challenges.
 
-Problem Statement
-Participants will be shown a reference website UI for a limited time.
-They must:
+---
 
-Replicate the UI layout as accurately as possible
+## 📌 About
 
-Implement at least one meaningful improvement
+RepliCode challenges participants to observe a real-world website UI, replicate it as accurately as possible, and enhance it with meaningful improvements — all using core frontend technologies. The focus is on **layout accuracy**, **code understanding**, and **thoughtful UI improvements**, not frameworks or heavy tooling.
 
-Deploy the final website
+---
 
-Explain key CSS/HTML properties used
+## 🧩 Problem Statement
 
-Tech Stack
-HTML
+Participants are shown a reference website UI for a limited time and must:
 
-CSS
+- Replicate the UI layout as accurately as possible
+- Implement at least one meaningful improvement
+- Deploy the final website
+- Explain key CSS/HTML properties used
 
-Optional: Vanilla JavaScript
+---
 
-No frameworks required
+## 🛠️ Tech Stack
 
-Internet & AI tools are allowed, but participants must clearly understand and explain their code.
+- HTML
+- CSS
+- JavaScript *(optional, Vanilla only)*
 
-Eligibility
-Open only to students of Annamacharya Institute of Technology and Sciences, Tirupati
+> ⚠️ No frameworks required. Internet and AI tools are allowed, but participants must be able to clearly understand and explain their code.
 
-Participation Type: Group
+---
 
-Beginner to intermediate frontend learners are encouraged
+## 🎓 Eligibility
 
-Event Structure
-Round 1 – Frontend Replication Challenge (Offline Round)
+- Open exclusively to students of **Annamacharya Institute of Technology and Sciences, Tirupati**
+- Participation type: **Group**
+- Beginner to intermediate frontend learners are encouraged to participate
 
-Reference UI displayed for limited time
+---
 
-Participants recreate the layout and add improvements
+## 📅 Event Structure
 
-Final submission includes:
+### Round 1 — Frontend Replication Challenge *(Offline)*
 
-Live deployed link (Netlify / GitHub Pages)
+1. Reference UI is displayed for a limited time
+2. Participants recreate the layout and add their own improvements
+3. Final submission includes:
+   - ✅ Live deployed link (Netlify / GitHub Pages)
+   - ✅ Source code repository
+   - ✅ Explanation of at least one frontend concept used
 
-Source code repository
+---
 
-Explanation of at least one frontend concept used
+## 📤 Submission & Judging
 
-Submission & Judging
-Registration & payment are handled via Unstop
+| Platform | Purpose |
+|----------|---------|
+| [Unstop](https://unstop.com) | Registration & payment |
+| [Devpost](https://devpost.com) | Project submission & judging |
 
-Project submission & judging are handled via Devpost
+> 📢 The Devpost submission link will be shared **only in the official WhatsApp group**.  
+> ⚠️ Only participants registered on Unstop are eligible for judging, prizes, and certificates.
 
-Devpost submission link will be shared only in the official WhatsApp group
+---
 
-️ Only participants registered on Unstop are eligible for judging, prizes, and certificates
+## ⚖️ Judging Criteria
 
-Judging Criteria
-UI Replication Accuracy
+- **UI Replication Accuracy** — How closely the submission mirrors the reference UI
+- **Code Structure & Understanding** — Clean, readable, and explainable code
+- **Quality of Improvements** — Thoughtfulness and impact of enhancements
+- **Overall Presentation & Deployment** — Live deployment and project presentation
 
-Code Structure & Understanding
+---
 
-Quality of Improvements
+## 🏆 Prizes & Certificates
 
-Overall Presentation & Deployment
+- 🎖️ **Participation Certificates** for all valid submissions (issued digitally via Unstop)
+- 🥇 **Winner Recognition** (non-cash awards)
 
-Prizes & Certificates
-Participation Certificates for all valid submissions
-
-Winner recognition (non-cash awards)
-
-Certificates will be issued digitally via Unstop
-
-Important Instructions
-Participants must join the official WhatsApp group (link provided on this page)
-
-All announcements, Devpost links, and updates will be shared only there
-
-Plagiarism or copied submissions will lead to disqualification
+---
